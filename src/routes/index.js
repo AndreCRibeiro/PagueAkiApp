@@ -75,6 +75,7 @@ const NotAuthenticate = () => (
     <Stack.Screen name="Product" component={Product} />
     <Stack.Screen name="SimpleForm" component={SimpleForm} />
     <Stack.Screen name="Forms" component={Forms} />
+    <Stack.Screen name="Finish" component={Finish} />
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="Signup" component={Signup} />
   </Stack.Navigator>

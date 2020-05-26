@@ -9,6 +9,10 @@ const Endpoints = {
   // signup
   postSignUp: (data) => api.post('/users', data),
 
+  postPague: (data) => api.post('/pagueaki', data),
+
+  postMed: (data) => api.post('/drugstore', data),
+
   // perfil
   getPerfil: () => api.get('/userContracts'),
 

@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo } from 'react';
 
 const pt = {
-  'this is a required field': 'esse campo é obrigatorio',
-  'this must be a valid email': 'e-mail inválido',
-  'this must be at least 6 characters': 'mínimo 6 caracteres',
-  'this must be at least 8 characters': 'mínimo 8 caracteres',
+  'this is a required field': 'Esse campo é obrigatorio',
+  'this must be a valid email': 'E-mail inválido',
+  'this must be at least 6 characters': 'Mínimo 6 caracteres',
+  'this must be at least 8 characters': 'Mínimo 8 caracteres',
   'this must be at least 11 characters': 'Telefone com DDD e 9 na frente',
 };
 
@@ -39,7 +39,7 @@ export const useValidation = (schema) => {
     try {
       await validations.validate(param);
       setPrivate(false);
-    } catch (err) {}
+    } catch (err) { }
   }, []);
 
   const err = useMemo(

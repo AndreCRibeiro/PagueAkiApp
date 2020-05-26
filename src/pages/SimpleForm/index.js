@@ -5,7 +5,14 @@ import * as yup from 'yup';
 import { useCommons, useValidation, useLazyFetch } from '../../hooks';
 import { useAuth } from '../../global';
 // ui
-import { Input, Button, Logo, Avatar } from '../../components';
+import {
+  Input,
+  Button,
+  Logo,
+  RadioButton,
+  Picker,
+  InputMask,
+} from '../../components';
 import { Container, ButtonsView } from './styles';
 import Endpoints, { api } from '../../services';
 import { Imgs } from '../../assets';
@@ -13,6 +20,7 @@ import { Imgs } from '../../assets';
 const schema = {
   name: yup.string().required(),
   email: yup.string().email().required(),
+  cpf: yup.string().required(),
   password: yup.string().required().min(6),
   phone: yup.string().required().min(11), // mascaras
 };
@@ -26,30 +34,62 @@ function SimpleForm() {
     name: '',
     email: '',
     phone: '',
-    password: '',
+    cpf: '',
+  });
+  const [userMed, setUserMed] = useState({
+    name: '',
+    last_name: '',
+    email: '',
+    phone1: '',
+    public_agency: '',
+    professional_situation: '',
+    cpf: '',
+    payment_method: '',
+    bank_name: '',
+    bank_agency: '',
+    bank_account_number: '',
   });
 
-  console.tron.log(product);
-
   const [fetch, { error, response, loading }] = useLazyFetch(
-    Endpoints.postSignUp,
+    Endpoints.postPague,
     user
   );
+
+  const [fetch2, { error2, response2, loading2 }] = useLazyFetch(
+    Endpoints.postMed,
+    userMed
+  );
+
   const handleFetchSuccess = useCallback(() => {
-    navigation.navigate('Login');
-  }, [response]);
+    navigation.navigate('Finish');
+  }, [response, response2]);
 
   useEffect(() => {
     if (!errorValidation && !response) {
-      fetch();
+      if (user.name !== '') {
+        fetch();
+      }
+      if (userMed.name !== '') {
+        if (userMed.professional_situation === 'SIM') {
+          userMed.professional_situation = 'Servidor';
+        }
+
+        fetch2();
+      }
     }
     if (response) {
       handleFetchSuccess();
     }
   }, [response, errorValidation]);
 
-  const handleSignUp = useCallback(() => validade(user), [
+  const handlePague = useCallback(() => validade(user), [
     user,
+    navigation,
+    errorValidation,
+  ]);
+
+  const handleMed = useCallback(() => validade(userMed), [
+    userMed,
     navigation,
     errorValidation,
   ]);
@@ -74,6 +114,7 @@ function SimpleForm() {
             outline
             error={errorValidation.name}
           />
+
           <Input
             keyRef="email"
             onChangeText={setUser}
@@ -83,17 +124,34 @@ function SimpleForm() {
             outline
             error={errorValidation.email}
           />
-          <Input
+          <InputMask
+            keyRef="cpf"
+            onChangeText={setUser}
+            value={user.cpf}
+            placeholder="XXX.XXX.XXX-XX"
+            title="CPF"
+            mask="[000].[000].[000]-[00]"
+            keyboardType="numeric"
+            outline
+            error={errorValidation.password}
+          />
+          <InputMask
             keyRef="phone"
             onChangeText={setUser}
             value={user.phone}
-            placeholder="(61) 99999-8888"
+            placeholder="(DD) XXXXX-XXXX"
             title="Celular"
+            mask="([00]) [00000]-[0000]"
+            keyboardType="numeric"
             outline
             error={errorValidation.phone}
           />
           <ButtonsView m>
-            <Button text="SOLICITAR" handleOnPress={handleSignUp} />
+            <Button
+              text="SOLICITAR"
+              handleOnPress={handlePague}
+              loading={loading}
+            />
             <Button
               text="Cancelar"
               tbutton
@@ -107,69 +165,122 @@ function SimpleForm() {
         <>
           <Input
             keyRef="name"
-            onChangeText={setUser}
-            value={user.name}
-            placeholder="Usuário Exemplo"
+            onChangeText={setUserMed}
+            value={userMed.name}
+            placeholder="Nome"
             title="Nome"
             outline
             error={errorValidation.name}
           />
           <Input
+            keyRef="last_name"
+            onChangeText={setUserMed}
+            value={userMed.last_name}
+            placeholder="Sobrenome"
+            title="Sobrenome"
+            outline
+            error={errorValidation.name}
+          />
+          <Input
             keyRef="email"
-            onChangeText={setUser}
-            value={user.email}
+            onChangeText={setUserMed}
+            value={userMed.email}
             placeholder="exemplo@exemplo.com"
             title="Email"
             outline
             error={errorValidation.email}
           />
-          <Input
-            keyRef="phone"
-            onChangeText={setUser}
-            value={user.phone}
+          <InputMask
+            keyRef="cpf"
+            onChangeText={setUserMed}
+            value={userMed.cpf}
+            placeholder="XXX.XXX.XXX-XX"
+            title="CPF"
+            mask="[000].[000].[000]-[00]"
+            outline
+            error={errorValidation.password}
+            keyboardType="numeric"
+          />
+          <InputMask
+            keyRef="phone1"
+            onChangeText={setUserMed}
+            value={userMed.phone1}
             placeholder="(61) 99999-8888"
             title="Celular"
+            mask="([00]) [00000]-[0000]"
+            keyboardType="numeric"
             outline
             error={errorValidation.phone}
           />
+          <RadioButton
+            keyRef="professional_situation"
+            title="Funcionário público?"
+            opt1="SIM"
+            opt2="NÃO"
+            onChangeOption={setUserMed}
+            value={userMed.professional_situation}
+          />
           <Input
-            keyRef="orgao"
-            onChangeText={setUser}
-            value={user.password}
+            keyRef="public_agency"
+            onChangeText={setUserMed}
+            value={userMed.public_agency}
             placeholder="Orgão"
             title="Orgão"
             outline
             error={errorValidation.password}
           />
-          <Input
-            keyRef="cpf"
-            onChangeText={setUser}
-            value={user.password}
-            placeholder="XXX.XXX.XXX-XX"
-            title="CPF"
-            outline
-            error={errorValidation.password}
-          />
-          <Input
-            keyRef="payment"
-            onChangeText={setUser}
-            value={user.password}
-            placeholder="Forma de pagamento"
+          <Picker
+            keyRef="payment_method"
+            onChangeOption={setUserMed}
+            value={userMed.payment_method}
             title="Forma de pagamento"
-            outline
             error={errorValidation.password}
+            options={[
+              'Cartão de crédito',
+              'Cartão de débito',
+              'Débito em conta',
+              'Boleto',
+            ]}
           />
-          <Input
-            keyRef="card"
-            onChangeText={setUser}
-            value={user.password}
-            placeholder="Cartão"
-            title="Cartão"
-            outline
-            error={errorValidation.password}
-          />
+          {userMed.payment_method === 'Débito em conta' && (
+            <>
+              <Input
+                keyRef="bank_name"
+                onChangeText={setUserMed}
+                value={userMed.bank_name}
+                placeholder="Banco"
+                title="Banco"
+                outline
+                error={errorValidation.password}
+              />
+              <InputMask
+                keyRef="bank_agency"
+                onChangeText={setUserMed}
+                value={userMed.bank_agency}
+                placeholder="Cartão"
+                title="Agência"
+                mask="[0000]"
+                outline
+                error={errorValidation.password}
+              />
+              <Input
+                keyRef="bank_account_number"
+                onChangeText={setUserMed}
+                value={userMed.bank_account_number}
+                placeholder="Número da conta"
+                title="Número da conta"
+                outline
+                error={errorValidation.password}
+              />
+            </>
+          )}
+
           <ButtonsView>
-            <Button text="SOLICITAR" handleOnPress={handleSignUp} />
+            <Button
+              text="CONTRATAR"
+              handleOnPress={handleMed}
+              loading={loading2}
+            />
             <Button
               text="Cancelar"
               tbutton
