@@ -25,24 +25,6 @@ import {
   NoServiceText,
 } from './styles';
 
-const objTeste = [
-  {
-    product: 'Caminhão',
-    color: '#5B5B5B',
-    logo: Imgs.LOGO_CAMINHAO2,
-    status: 'Canceled',
-    data: {
-      name: 'Teste',
-      cpf: '123',
-      rg: '321',
-      uf: 'DF',
-      phone1: '890',
-      phone2: '098',
-      email: 'teste email',
-    },
-  },
-];
-
 const options = {
   title: 'Escolha uma das opções',
   cancelButtonTitle: 'Cancelar',
@@ -111,8 +93,14 @@ export default function Perfil() {
         </ButtonChange>
       </AvatarView>
       <InfosView>
-        <TitleNText title="E-mail" text="Teste" />
-        <TitleNText title="Telefone" text="Teste" />
+        <TitleNText
+          title="E-mail"
+          text={response && response.name ? response.name : 'Usuário'}
+        />
+        <TitleNText
+          title="Telefone"
+          text={response && response.email ? response.email : 'Email'}
+        />
         <Line />
         <Services>
           <ServicesText>Serviços Ativos</ServicesText>
@@ -129,9 +117,7 @@ export default function Perfil() {
                 cardText="Medicação"
                 source={Imgs.LOGO_MEDICACAO}
                 cardColor={colors.ORANGE}
-                handleOnPress={() =>
-                  handlePress(response.drugstore, 'Medicacao')
-                }
+                handleOnPress={() => { }}
               />
             )}
             {response && response.truck && (
@@ -139,9 +125,7 @@ export default function Perfil() {
                 cardText="Caminhão"
                 source={Imgs.LOGO_CAMINHAO2}
                 cardColor={colors.DARK}
-                handleOnPress={() =>
-                  handlePress(response.drugstore, 'Caminhao')
-                }
+                handleOnPress={() => { }}
               />
             )}
           </Scroll>

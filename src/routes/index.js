@@ -16,6 +16,7 @@ import { Forms } from '../pages';
 import Finish from '../pages/Finish';
 import ShowData from '../pages/ShowData';
 import Confirm from '../pages/Confirm';
+import SimpleForm from '../pages/SimpleForm';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -72,6 +73,8 @@ const NotAuthenticate = () => (
   <Stack.Navigator headerMode="none" initialRouteName="Home">
     <Stack.Screen name="Home" component={Home} />
     <Stack.Screen name="Product" component={Product} />
+    <Stack.Screen name="SimpleForm" component={SimpleForm} />
+    <Stack.Screen name="Forms" component={Forms} />
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="Signup" component={Signup} />
   </Stack.Navigator>

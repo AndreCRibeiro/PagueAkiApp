@@ -38,11 +38,11 @@ export default function Product() {
   const { product } = route.params;
 
   const handleConfirm = useCallback(() => {
-    if (data) {
-      navigation.navigate('Forms', { typeForm: product.value });
-    } else {
-      navigation.navigate('Login');
-    }
+    navigation.navigate('Forms', { typeForm: product.value });
+  }, []);
+
+  const handleSimpleForm = useCallback(() => {
+    navigation.navigate('SimpleForm', { product });
   }, []);
 
   const handleScroll = (event) => {
@@ -68,11 +68,11 @@ export default function Product() {
                   <ProductText>Clique na tabela para abri-la</ProductText>
                 </ImageView>
               ) : (
-                <ProductTextView>
-                  <Point />
-                  <ProductText multiline>{data}</ProductText>
-                </ProductTextView>
-              );
+                  <ProductTextView>
+                    <Point />
+                    <ProductText multiline>{data}</ProductText>
+                  </ProductTextView>
+                );
             })}
           </Scroll>
         ))}
@@ -90,9 +90,9 @@ export default function Product() {
         <Button
           color={colorButton[product.value]}
           margin={metrics.MEDIUM}
-          text={product.value === 'PAGUEAKI' ? 'CONTACTAR' : 'CONTRATAR'}
+          text={product.value === 'PAGUEAKI' ? 'SOLICITAR' : 'CONTRATAR'}
           handleOnPress={
-            product.value === 'PAGUEAKI' ? () => {} : handleConfirm
+            product.value === 'CAMINHAO' ? handleConfirm : handleSimpleForm
           }
         />
       )}
